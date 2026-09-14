@@ -1,0 +1,10 @@
+node_modules/
+.next/
+playwright-report/
+test-results/
+drizzle/
+package-lock.json
+CHZZK_STREAM_EXPLORER_PLAN.md
+public/art/
+.tools/
+.data/
