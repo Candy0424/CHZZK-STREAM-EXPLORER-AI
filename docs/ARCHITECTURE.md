@@ -41,7 +41,11 @@ flowchart LR
 | page / pageSize | 1 이상 / 1~60                                 | 1 / 24       |
 | ids             | 즐겨찾기 채널 ID, 쉼표 구분; 빈 값은 빈 결과  | 생략 시 전체 |
 
-응답: `items`, 필터 결과 `total`, 카탈로그 `counts`, `categories`, `lastSuccessfulSync`, `freshness`, `mode`, `page`, `pageSize`, `nextPage`, `totalViewers`. 유효하지 않은 쿼리 400, 저장소 조회 실패 503. HTTP는 no-store, DB 스냅샷은 서버에서 30초 캐시합니다. 브라우저가 원본 치지직 API를 호출하지 않습니다.
+응답: `items`, 필터 결과 `total`, 카탈로그 `counts`, `categories`, `lastSuccessfulSync`, `freshness`, `mode`, `page`, `pageSize`, `nextPage`, `totalViewers`. 유효하지 않은 쿼리 400, 저장소 조회 실패 503. HTTP는 no-store, DB 스냅샷은 서버 프로세스 메모리에 30초 캐시합니다. 브라우저가 원본 치지직 API를 호출하지 않습니다.
+
+5천 개 이상의 실제 카탈로그는 4 MB를 넘어 Next.js Data Cache의 항목당 2 MB 제한에 걸립니다. `snapshot-cache.ts`는 전체 스냅샷 하나를 메모리에 유지하고 동시 요청의 DB 읽기를 공유합니다. TTL 만료 시 새 조회를 기다리며 실패를 캐시하지 않습니다. 동기화 API는 같은 프로세스의 캐시를 무효화하고, CLI/다른 인스턴스의 변경은 30초 TTL 뒤 반영됩니다. 무효화 전에 시작한 조회가 최신 캐시를 덮어쓰지 않도록 세대를 확인합니다.
+
+실제 API는 미지정 카테고리를 null로, 신규 카테고리를 `ENTERTAINMENT` 등으로 반환합니다. ID와 이름을 보존하면서 미지정·신규 종류는 앱의 기타 필터로 분류합니다. 누락 필드나 잘못된 자료형은 계속 거부합니다.
 
 ## 내부 동기화
 

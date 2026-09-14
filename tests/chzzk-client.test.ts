@@ -5,6 +5,53 @@ const credentials = { clientId: "fixture-client", clientSecret: "fixture-secret"
 const ok = (content: unknown) =>
   new Response(JSON.stringify({ code: 200, message: null, content }));
 describe("official API client", () => {
+  it("keeps uncategorized broadcasts returned with null category fields", async () => {
+    const fetcher = vi.fn<typeof fetch>().mockResolvedValue(
+      ok({
+        data: [
+          live(),
+          { ...live(channelB), categoryType: null, liveCategory: null, liveCategoryValue: "" },
+        ],
+        page: { next: "more-broadcasts" },
+      }),
+    );
+    const page = await new ChzzkClient(credentials, fetcher).getLivePage();
+    expect(page.data).toHaveLength(2);
+    expect(page.data[1]).toMatchObject({
+      channelId: channelB,
+      categoryType: "ETC",
+      liveCategory: "",
+      liveCategoryValue: "미분류",
+    });
+    expect(page.page.next).toBe("more-broadcasts");
+  });
+  it.each(["ENTERTAINMENT", "FUTURE_CATEGORY"])(
+    "preserves broadcasts with the API category type %s",
+    async (categoryType) => {
+      const fetcher = vi
+        .fn<typeof fetch>()
+        .mockResolvedValue(
+          ok({
+            data: [{ ...live(), categoryType, liveCategory: "talk", liveCategoryValue: "토크" }],
+            page: {},
+          }),
+        );
+      const page = await new ChzzkClient(credentials, fetcher).getLivePage();
+      expect(page.data[0]).toMatchObject({
+        categoryType: "ETC",
+        liveCategory: "talk",
+        liveCategoryValue: "토크",
+      });
+    },
+  );
+  it("still rejects category fields with an invalid data type", async () => {
+    const fetcher = vi
+      .fn<typeof fetch>()
+      .mockResolvedValue(ok({ data: [{ ...live(), categoryType: { invalid: true } }], page: {} }));
+    await expect(new ChzzkClient(credentials, fetcher).getLivePage()).rejects.toMatchObject({
+      code: "INVALID_RESPONSE",
+    });
+  });
   it("uses client headers, preserves cursors and normalizes timezone-less KST", async () => {
     const fetcher = vi
       .fn<typeof fetch>()
@@ -84,21 +131,19 @@ describe("official API client", () => {
     ).toHaveLength(1);
   });
   it("deduplicates channel metadata requests", async () => {
-    const fetcher = vi
-      .fn<typeof fetch>()
-      .mockResolvedValue(
-        ok({
-          data: [
-            {
-              channelId: channelA,
-              channelName: "테스트",
-              channelImageUrl: null,
-              followerCount: 1,
-              verifiedMark: true,
-            },
-          ],
-        }),
-      );
+    const fetcher = vi.fn<typeof fetch>().mockResolvedValue(
+      ok({
+        data: [
+          {
+            channelId: channelA,
+            channelName: "테스트",
+            channelImageUrl: null,
+            followerCount: 1,
+            verifiedMark: true,
+          },
+        ],
+      }),
+    );
     const result = await new ChzzkClient(credentials, fetcher).getChannels([
       channelA,
       channelA,

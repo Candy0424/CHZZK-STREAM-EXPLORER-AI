@@ -20,9 +20,22 @@ export const liveSchema = z.object({
   openDate: dateString,
   adult: z.boolean(),
   tags: z.array(z.string()),
-  categoryType: z.enum(["GAME", "SPORTS", "ETC"]),
-  liveCategory: z.string(),
-  liveCategoryValue: z.string(),
+  // Live responses include null and newer types such as ENTERTAINMENT.
+  // Preserve their category ID/name and group them under the app's ETC filter.
+  categoryType: z
+    .string()
+    .nullable()
+    .transform((value): "GAME" | "SPORTS" | "ETC" =>
+      value === "GAME" || value === "SPORTS" ? value : "ETC",
+    ),
+  liveCategory: z
+    .string()
+    .nullable()
+    .transform((value) => value ?? ""),
+  liveCategoryValue: z
+    .string()
+    .nullable()
+    .transform((value) => value || "미분류"),
 });
 const pageSchema = z.object({
   data: z.array(liveSchema),

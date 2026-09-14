@@ -1,6 +1,6 @@
 import { timingSafeEqual } from "node:crypto";
 import { NextRequest, NextResponse } from "next/server";
-import { revalidateTag } from "next/cache";
+import { invalidateSnapshotCache } from "@/lib/snapshot";
 import { getLiveEnv, isDemoMode } from "@/lib/env";
 import { ChzzkClient } from "@/lib/chzzk-client";
 import { createSyncRepository } from "@/lib/sync-repository";
@@ -30,7 +30,7 @@ export async function POST(request: NextRequest) {
       new ChzzkClient({ clientId: env.CHZZK_CLIENT_ID, clientSecret: env.CHZZK_CLIENT_SECRET }),
       env.SYNC_MAX_PAGES,
     );
-    revalidateTag("streamers", { expire: 0 });
+    invalidateSnapshotCache();
     return NextResponse.json(result, {
       status:
         result.status === "FAILED"
