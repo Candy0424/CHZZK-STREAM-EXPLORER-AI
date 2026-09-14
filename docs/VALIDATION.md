@@ -15,6 +15,7 @@
 - 최종 E2E: **14개 통과** (데스크톱 7개, 360px 모바일 7개)
 - 최종 타입 검사·린트·운영 빌드: 모두 통과
 - [데스크톱 실행 화면](screenshots/desktop.png) · [모바일 실행 화면](screenshots/mobile.png)
+- GitHub 업로드: `Candy0424/CHZZK-STREAM-EXPLORER-AI`, 최초 소스 커밋 `c8af0ea`. `main`이 `origin/main`을 추적하도록 연결 완료
 
 ### 해결한 개발 환경 문제
 

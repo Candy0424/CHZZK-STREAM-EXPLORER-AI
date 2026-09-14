@@ -19,7 +19,7 @@
 | PostgreSQL 모델/마이그레이션, 상태 트랜잭션, 이력/숨김 보존 | 완료 | Drizzle + PGlite DB 통합 테스트 |
 | 동기화 중복 잠금, 관리자 CLI, 보호된 내부 API | 완료 | 구현 및 로컬 검증, 운영 다중 프로세스 검증은 대기 |
 | 실제 치지직 인증 및 운영 DB 수집 | 예정 | 인증키와 연결 정보 필요 |
-| GitHub 코드/문서 업로드 | 진행 중 | `Candy0424/CHZZK-STREAM-EXPLORER-AI` 생성 및 origin 연결 |
+| GitHub 코드/문서 업로드 | 완료 | `Candy0424/CHZZK-STREAM-EXPLORER-AI` main 브랜치 업로드 및 origin 추적 |
 | 공개 웹 배포, 3회 실사용, 블로그/SNS 게시 | 예정 | 사용자 설정·실사용 이후 진행 |
 
 저장소 표시 이름은 **CHZZK-STREAM-EXPLORER (AI)**, GitHub 식별자는 공백·괄호 제한에 따라 **CHZZK-STREAM-EXPLORER-AI**로 정했다. 초기 실제 채널 시드는 비어 있으며 사용자 선정 채널과 첫 공식 전체 라이브 수집으로 카탈로그를 구성한다. 미리보기의 가상 채널은 DB에 저장하지 않는다.
@@ -836,3 +836,17 @@ MVP 완성 후 다음 순서로 검토한다.
 - **검증 방법과 결과:** 타입 검사/린트/운영 빌드 및 초기 E2E 14개 통과. 운영 의존성 감사 0건, 브라우저 정적 번들에 서버 비밀 환경 변수 이름 없음. 최신 전체 실행 결과는 작업 003에 기록
 - **결정 사항과 이유:** Drizzle ORM을 선택해 명시적 PostgreSQL 트랜잭션 사용. 세션 잠금 유지가 필요한 동기화에는 직접/세션 DB 연결 사용. 5분 예약 작업은 Secrets와 활성화 변수 설정 전 실행하지 않음. 샘플 링크는 허구의 공식 채널을 열지 않고 안내를 표시함. 실제 연령 확인은 치지직에서 수행
 - **다음 작업:** 최종 검증과 GitHub push. 이후 실제 인증키/DB 설정, 첫 전체 수집, 호스팅 배포와 시간대별 실사용
+
+### 2026-09-14 / 작업 003 — 최종 검증 및 GitHub 공개 업로드
+
+- **상태:** 완료
+- **목표:** 구현 결과를 검증하고 요청한 GitHub 저장소에 코드와 기획서를 업로드
+- **수행한 작업:** Windows 특수문자 경로 문제 수정 후 전체 테스트 재실행, 데스크톱/모바일 실행 화면 저장, 소스 포맷 정리, `.env` 제외 및 브라우저 번들 검사, Git main 커밋과 원격 push, GitHub에서 파일/README/실행 화면 링크 확인
+- **변경한 파일:** `docs/VALIDATION.md`, `docs/screenshots/desktop.png`, `docs/screenshots/mobile.png`, `README.md`, `.gitattributes`, 테스트 및 본 개발 일지
+- **사용한 명령·API:** `npm test`, `tsc --noEmit`, `eslint .`, `next build`, `playwright test`, `npm audit --omit=dev`, `git diff --cached --check`, `git commit`, `git push --set-upstream origin main`
+- **문제와 원인:** GitHub 저장소 이름에 공백과 괄호를 사용할 수 없음. 원래 Node 런타임과 일부 도구의 Windows `#` 경로 호환성 문제
+- **해결 방법:** 식별자를 `CHZZK-STREAM-EXPLORER-AI`로 정하고 표시 이름을 설명/README에 보존. Node 24 및 테스트 진입점 보완 사용. 현재 프로젝트 폴더를 원격 저장소 origin으로 연결
+- **검증 방법과 결과:** 단위/DB 통합 테스트 **31/31 통과**, 데스크톱/360px 모바일 E2E **14/14 통과**, 타입 검사·린트·운영 빌드 성공. 화면 촬영 과정의 탐색 테스트 2개도 성공. 운영 의존성 취약점 0개, 개발 도구 moderate 4개는 검증 문서에 기록. GitHub에서 최초 소스 커밋 `c8af0ea`의 업로드를 확인
+- **결정 사항과 이유:** 실제 인증키/운영 DB가 없어 공식 API 실수집·웹 배포·실사용 후기는 완료로 표시하지 않음. 현재 앱은 명시적인 샘플 모드로 실행. GitHub Actions CI는 push 후 시작되며 로컬 검증과 구분
+- **다음 작업:** `.env.local` 또는 운영 Secrets 설정 후 실제 라이브 전체 수집, DB 세션 잠금 운영 검증, 배포 URL 발급, 실제 채널 20개 비교, 시간대별 3회 후기와 게시물 완성
+- **결과 링크:** https://github.com/Candy0424/CHZZK-STREAM-EXPLORER-AI
