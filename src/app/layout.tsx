@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { DEFAULT_THEME, THEME_INIT_SCRIPT } from "@/lib/themes";
+import "./themes.css";
 import "./globals.css";
 export const metadata: Metadata = {
   title: "LiveScope — 지금, 어떤 방송 볼까?",
@@ -9,7 +11,10 @@ export const metadata: Metadata = {
 };
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="ko">
+    <html lang="ko" data-theme={DEFAULT_THEME} suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
+      </head>
       <body>{children}</body>
     </html>
   );

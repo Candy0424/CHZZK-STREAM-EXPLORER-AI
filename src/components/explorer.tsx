@@ -26,6 +26,7 @@ import {
 } from "lucide-react";
 import type { Streamer, StreamerResponse } from "@/types/streamer";
 import { StreamerCard, elapsed } from "./streamer-card";
+import { ThemePicker } from "./theme-picker";
 import { useFavorites, toggleFavorite as saveFavorite } from "@/lib/favorites";
 type View = "explore" | "favorites";
 type Status = "all" | "online" | "offline" | "delayed";
@@ -252,6 +253,7 @@ export function Explorer() {
             <b>{view === "favorites" ? "즐겨찾기" : "방송 탐색"}</b>
           </div>
           <div className="topbar-right">
+            <ThemePicker />
             <span className="platform-label">
               <i />
               CHZZK
