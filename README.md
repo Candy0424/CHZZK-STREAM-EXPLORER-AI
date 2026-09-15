@@ -7,6 +7,7 @@
 - [GitHub 저장소](https://github.com/Candy0424/CHZZK-STREAM-EXPLORER-AI)
 - [원본 기획서와 누적 개발 일지](CHZZK_STREAM_EXPLORER_PLAN.md)
 - [구조와 API](docs/ARCHITECTURE.md) · [운영·배포](docs/OPERATIONS.md) · [검증 기록](docs/VALIDATION.md)
+- [벨로그 개발기 — 실제 실행 화면과 MCP 서버 구현](https://velog.io/@candycode/livescope-chzzk-mcp-development)
 
 GitHub 이름에는 공백과 괄호를 사용할 수 없어 저장소 식별자는 `CHZZK-STREAM-EXPLORER-AI`입니다.
 
@@ -29,6 +30,7 @@ GitHub 이름에는 공백과 괄호를 사용할 수 없어 저장소 식별자
 | Windows 실제 모드 실행 및 5분 간격 자동 수집                          | 구현·실행 확인 |
 | MCP 방송 검색·채널 상태·현황 도구 서버                                | 구현·실제 호출 검증 |
 | 실제 사용과 피드백 반영                                              | [기록](docs/USAGE_REVIEW.md) |
+| 개발 블로그 게시                                                     | [전체 공개 완료](https://velog.io/@candycode/livescope-chzzk-mcp-development) |
 | 공개 서비스 배포, 시간대별 3회 장기 상태 비교                          | 후속 운영 검증 |
 
 **환경 설정 없이 새로 복제하면 미리보기 모드로 실행됩니다.** 미리보기의 이름, ID, 시청자 수, 시각은 모두 가상 예시입니다. 현재 개발 PC는 실제 API와 로컬 PostgreSQL에 연결되어 있습니다. 가상 카드 클릭 시 안내가 열리고, 실제 모드의 온라인 카드는 정확한 치지직 채널을 새 탭에서 엽니다. 샘플 데이터는 실제 DB에 시드하지 않습니다.
@@ -180,5 +182,5 @@ Next.js Node 런타임을 지원하는 호스팅과 관리형 PostgreSQL에 배�
 
 - 공개 서비스 URL: 아직 배포하지 않음
 - 실제 사용·피드백: [사용 기록](docs/USAGE_REVIEW.md), 시간대별 장기 비교는 후속 검증
-- 블로그/SNS: [게시 초안](docs/BLOG_DRAFT.md), 아직 미게시
+- 블로그: [벨로그 개발기](https://velog.io/@candycode/livescope-chzzk-mcp-development), 전체 공개 게시 완료
 - 후속 기능: 방송 시작 알림, 로그인·기기 간 동기화, 관리자 UI, PWA
